@@ -55,12 +55,6 @@
 #	include "xmrstak/misc/uac.hpp"
 #endif // _WIN32
 
-void help()
-{
-	using namespace std;
-	using namespace xmrstak;
-}
-
 bool read_yes_no(const char* str)
 {
 	std::string tmp;
@@ -372,12 +366,6 @@ int main(int argc, char *argv[])
 	for(size_t i = 1; i < argc; ++i)
 	{
 		std::string opName(argv[i]);
-		if(opName.compare("-h") == 0 || opName.compare("--help") == 0)
-		{
-			help();
-			win_exit(0);
-			return 0;
-		}
 		if(opName.compare("-v") == 0 || opName.compare("--version") == 0)
 		{
 			std::cout<< "Version: " << get_version_str_short() << std::endl;
