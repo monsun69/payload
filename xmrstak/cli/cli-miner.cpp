@@ -61,60 +61,6 @@ void help()
 {
 	using namespace std;
 	using namespace xmrstak;
-
-	cout<<"Usage: "<<params::inst().binaryName<<" [OPTION]..."<<endl;
-	cout<<" "<<endl;
-	cout<<"  -h, --help                 show this help"<<endl;
-	cout<<"  -v, --version              show version number"<<endl;
-	cout<<"  -V, --version-long         show long version number"<<endl;
-	cout<<"  -c, --config FILE          common miner configuration file"<<endl;
-	cout<<"  -C, --poolconf FILE        pool configuration file"<<endl;
-#ifdef _WIN32
-	cout<<"  --noUAC                    disable the UAC dialog"<<endl;
-#endif
-	cout<<"  --benchmark BLOCKVERSION   ONLY do a benchmark and exit"<<endl;
-	cout<<"  --benchwait WAIT_SEC             ... benchmark wait time"<<endl;
-	cout<<"  --benchwork WORK_SEC             ... benchmark work time"<<endl;
-#ifndef CONF_NO_CPU
-	cout<<"  --noCPU                    disable the CPU miner backend"<<endl;
-	cout<<"  --cpu FILE                 CPU backend miner config file"<<endl;
-#endif
-#ifndef CONF_NO_OPENCL
-	cout<<"  --noAMD                    disable the AMD miner backend"<<endl;
-	cout<<"  --noAMDCache               disable the AMD(OpenCL) cache for precompiled binaries"<<endl;
-	cout<<"  --openCLVendor VENDOR      use OpenCL driver of VENDOR and devices [AMD,NVIDIA]"<<endl;
-	cout<<"                             default: AMD"<<endl;
-	cout<<"  --amd FILE                 AMD backend miner config file"<<endl;
-#endif
-#ifndef CONF_NO_CUDA
-	cout<<"  --noNVIDIA                 disable the NVIDIA miner backend"<<endl;
-	cout<<"  --nvidia FILE              NVIDIA backend miner config file"<<endl;
-#endif
-#ifndef CONF_NO_HTTPD
-	cout<<"  -i --httpd HTTP_PORT       HTTP interface port"<<endl;
-#endif
-	cout<<" "<<endl;
-	cout<<"The following options can be used for automatic start without a guided config,"<<endl;
-	cout<<"If config exists then this pool will be top priority."<<endl;
-	cout<<"  -o, --url URL              pool url and port, e.g. pool.usxmrpool.com:3333"<<endl;
-	cout<<"  -O, --tls-url URL          TLS pool url and port, e.g. pool.usxmrpool.com:10443"<<endl;
-	cout<<"  -u, --user USERNAME        pool user name or wallet address"<<endl;
-	cout<<"  -r, --rigid RIGID          rig identifier for pool-side statistics (needs pool support)"<<endl;
-	cout<<"  -p, --pass PASSWD          pool password, in the most cases x or empty \"\""<<endl;
-	cout<<"  --use-nicehash             the pool should run in nicehash mode"<<endl;
-	cout<<"  --currency NAME            currency to mine"<<endl;
-	cout<< endl;
-#ifdef _WIN32
-	cout<<"Environment variables:\n"<<endl;
-	cout<<"  XMRSTAK_NOWAIT             disable the dialog `Press any key to exit."<<std::endl;
-	cout<<"                	            for non UAC execution"<<endl;
-	cout<< endl;
-#endif
-	std::string algos;
-	jconf::GetAlgoList(algos);
-	cout<< "Supported coin options: " << endl << algos << endl;
-	cout<< "Version: " << get_version_str_short() << endl;
-	cout<<"Brought to by fireice_uk and psychocrypt under GPLv3."<<endl;
 }
 
 bool read_yes_no(const char* str)
