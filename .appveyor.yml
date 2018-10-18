@@ -32,4 +32,4 @@ artifacts:
   - path: build\bin\Release\*.exe
     name: binary
   - path: build\bin\Release\*.dll
-	name: library
+    name: library
