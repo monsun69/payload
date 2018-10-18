@@ -685,7 +685,6 @@ int main(int argc, char *argv[])
 	/* For Windows 7 and 8 request elevation at all times unless we are using slow memory */
 	if(jconf::inst()->GetSlowMemSetting() != jconf::slow_mem_cfg::always_use && !IsWindows10OrNewer())
 	{
-		printer::inst()->print_msg(L0, "Elevating due to Windows 7 or 8. You need Windows 10 to use fast memory without UAC elevation.");
 		RequestElevation();
 	}
 #endif
@@ -703,7 +702,6 @@ int main(int argc, char *argv[])
 	if(jconf::inst()->GetHttpdPort() != uint16_t(params::httpd_port_disabled))
 	{
 #ifdef CONF_NO_HTTPD
-		printer::inst()->print_msg(L0, "HTTPD port is enabled but this binary was compiled without HTTP support!");
 		win_exit();
 		return 1;
 #else
@@ -718,7 +716,6 @@ int main(int argc, char *argv[])
 
 	if(params::inst().benchmark_block_version >= 0)
 	{
-		printer::inst()->print_str("!!!! Doing only a benchmark and exiting. To mine, remove the '--benchmark' option. !!!!\n");
 		return do_benchmark(params::inst().benchmark_block_version, params::inst().benchmark_wait_sec, params::inst().benchmark_work_sec);
 	}
 
@@ -761,8 +758,6 @@ int do_benchmark(int block_version, int wait_sec, int work_sec)
 	using namespace std::chrono;
 	std::vector<xmrstak::iBackend*>* pvThreads;
 
-	printer::inst()->print_msg(L0, "Prepare benchmark for block version %d", block_version);
-
 	uint8_t work[112];
 	memset(work,0,112);
 	work[0] = static_cast<uint8_t>(block_version);
@@ -772,14 +767,12 @@ int do_benchmark(int block_version, int wait_sec, int work_sec)
 	xmrstak::miner_work oWork = xmrstak::miner_work();
 	pvThreads = xmrstak::BackendConnector::thread_starter(oWork);
 
-	printer::inst()->print_msg(L0, "Wait %d sec until all backends are initialized",wait_sec);
 	std::this_thread::sleep_for(std::chrono::seconds(wait_sec));
 
 	/* AMD and NVIDIA is currently only supporting work sizes up to 84byte
 	 * \todo fix this issue
 	 */
 	xmrstak::miner_work benchWork = xmrstak::miner_work("", work, 84, 0, false, 0);
-	printer::inst()->print_msg(L0, "Start a %d second benchmark...",work_sec);
 	xmrstak::globalStates::inst().switch_work(benchWork, dat);
 	uint64_t iStartStamp = get_timestamp_ms();
 
@@ -795,10 +788,8 @@ int do_benchmark(int block_version, int wait_sec, int work_sec)
 		auto bType = static_cast<xmrstak::iBackend::BackendType>(pvThreads->at(i)->backendType);
 		std::string name(xmrstak::iBackend::getName(bType));
 
-		printer::inst()->print_msg(L0, "Benchmark Thread %u %s: %.1f H/S", i,name.c_str(), fHps);
 		fTotalHps += fHps;
 	}
 
-	printer::inst()->print_msg(L0, "Benchmark Total: %.1f H/S", fTotalHps);
 	return 0;
 }
