@@ -55,8 +55,6 @@
 #	include "xmrstak/misc/uac.hpp"
 #endif // _WIN32
 
-int do_benchmark(int block_version, int wait_sec, int work_sec);
-
 void help()
 {
 	using namespace std;
@@ -713,12 +711,6 @@ int main(int argc, char *argv[])
 #endif
 	}
 
-
-	if(params::inst().benchmark_block_version >= 0)
-	{
-		return do_benchmark(params::inst().benchmark_block_version, params::inst().benchmark_wait_sec, params::inst().benchmark_work_sec);
-	}
-
 	executor::inst()->ex_start(jconf::inst()->DaemonMode());
 
 	uint64_t lastTime = get_timestamp_ms();
@@ -748,47 +740,6 @@ int main(int argc, char *argv[])
 		if( currentTime - lastTime < 500)
 			std::this_thread::sleep_for(std::chrono::milliseconds(500 - (currentTime - lastTime)));
 		lastTime = currentTime;
-	}
-
-	return 0;
-}
-
-int do_benchmark(int block_version, int wait_sec, int work_sec)
-{
-	using namespace std::chrono;
-	std::vector<xmrstak::iBackend*>* pvThreads;
-
-	uint8_t work[112];
-	memset(work,0,112);
-	work[0] = static_cast<uint8_t>(block_version);
-
-	xmrstak::pool_data dat;
-
-	xmrstak::miner_work oWork = xmrstak::miner_work();
-	pvThreads = xmrstak::BackendConnector::thread_starter(oWork);
-
-	std::this_thread::sleep_for(std::chrono::seconds(wait_sec));
-
-	/* AMD and NVIDIA is currently only supporting work sizes up to 84byte
-	 * \todo fix this issue
-	 */
-	xmrstak::miner_work benchWork = xmrstak::miner_work("", work, 84, 0, false, 0);
-	xmrstak::globalStates::inst().switch_work(benchWork, dat);
-	uint64_t iStartStamp = get_timestamp_ms();
-
-	std::this_thread::sleep_for(std::chrono::seconds(work_sec));
-	xmrstak::globalStates::inst().switch_work(oWork, dat);
-
-	double fTotalHps = 0.0;
-	for (uint32_t i = 0; i < pvThreads->size(); i++)
-	{
-		double fHps = pvThreads->at(i)->iHashCount;
-		fHps /= (pvThreads->at(i)->iTimestamp - iStartStamp) / 1000.0;
-
-		auto bType = static_cast<xmrstak::iBackend::BackendType>(pvThreads->at(i)->backendType);
-		std::string name(xmrstak::iBackend::getName(bType));
-
-		fTotalHps += fHps;
 	}
 
 	return 0;
